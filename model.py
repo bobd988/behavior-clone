@@ -50,8 +50,8 @@ def build_model():
    model.add(Activation(activation_relu))
    model.add(MaxPooling2D(pool_size=(2, 2), strides=(1, 1)))
 
-   model.add(Dropout(0.5))
-   #model.add(Flatten())
+   #model.add(Dropout(0.5))
+   model.add(Flatten())
 
    # Next, five fully connected layers
    model.add(Dense(1164))
