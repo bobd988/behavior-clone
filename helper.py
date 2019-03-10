@@ -31,6 +31,21 @@ def resize(image, new_dim):
 
     return scipy.misc.imresize(image, new_dim)
 
+def rgb2yuv(image):
+    """
+    Convert the image from RGB to YUV (This is what the NVIDIA model does)
+    """
+    return cv2.cvtColor(image, cv2.COLOR_RGB2YUV)
+
+
+def preprocess(image):
+    """
+    Combine all preprocess functions into one
+    """
+    image = crop_image(image,0.35, 0.1)
+    image = resize(image,new_dim=(66, 200))
+    #image = rgb2yuv(image)
+    return image
 
 def random_flip(image, steering_angle, flipping_prob=0.5):
 
@@ -80,7 +95,7 @@ def min_max(data, a=-0.5, b=0.5):
 
 
 def generate_new_image(image, steering_angle, top_crop_percent=0.35, bottom_crop_percent=0.1,
-                       resize_dim=(64, 64), do_shear_prob=0.9):
+                       resize_dim=(66, 200), do_shear_prob=0.9):
 
     head = bernoulli.rvs(do_shear_prob)
     if head == 1:

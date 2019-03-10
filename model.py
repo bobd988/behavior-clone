@@ -1,5 +1,5 @@
 import tensorflow as tf
-from keras.layers import Dense, Flatten, Lambda, Activation, MaxPooling2D
+from keras.layers import Dense, Flatten, Dropout, Lambda, Activation, MaxPooling2D
 from keras.layers.convolutional import Convolution2D
 from keras.models import Sequential
 from keras.optimizers import Adam
@@ -8,14 +8,14 @@ import helper
 
 STEERING_COEFFICIENT = 0.25
 #col, row = 200,66
-#IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS = 66, 200, 3
-#INPUT_SHAPE = (IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS)
+IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS = 66, 200, 3
+INPUT_SHAPE = (IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS)
 #bob tf.python.control_flow_ops = tf
-number_of_epochs = 8
+number_of_epochs = 10
 #bob number_of_samples_per_epoch = 20032
 #number_of_validation_samples = 6400
-number_of_samples_per_epoch = 256
-number_of_validation_samples = 64
+number_of_samples_per_epoch = 2504
+number_of_validation_samples = 800
 learning_rate = 1e-4
 activation_relu = 'relu'
 
@@ -27,7 +27,7 @@ activation_relu = 'relu'
 def build_model():
 
    model = Sequential()
-   model.add(Lambda(lambda x: x / 127.5 - 1.0, input_shape=(64, 64, 3)))
+   model.add(Lambda(lambda x: x / 127.5 - 1.0, input_shape=INPUT_SHAPE))
 
    # starts with five convolutional and maxpooling layers
    model.add(Convolution2D(24, 5, 5, border_mode='same', subsample=(2, 2)))

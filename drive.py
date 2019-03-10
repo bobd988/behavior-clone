@@ -2,7 +2,7 @@ import argparse
 import base64
 import json
 from io import BytesIO
-import cv2
+import helper
 import eventlet.wsgi
 import numpy as np
 import socketio
@@ -18,7 +18,6 @@ sio = socketio.Server()
 app = Flask(__name__)
 model = None
 prev_image_array = None
-col, row = 200,66
 
 
 def crop(image, top_percent, bottom_percent):
@@ -50,9 +49,9 @@ def telemetry(sid, data):
     image = Image.open(BytesIO(base64.b64decode(imgString)))
     image_array = np.asarray(image)
 
-    image_array = crop(image_array, 0.35, 0.1)
-    image_array = resize(image_array, new_dim=(64, 64))
-
+    #image_array = crop(image_array, 0.35, 0.1)
+    #image_array = resize(image_array, new_dim=(66, 200))
+    image_array = helper.preprocess(image_array)
     transformed_image_array = image_array[None, :, :, :]
 
     # This model currently assumes that the features of the model are just the images. Feel free to change this.
