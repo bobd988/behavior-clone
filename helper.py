@@ -80,6 +80,19 @@ def random_shear(image, steering_angle, shear_range=200):
     return image, steering_angle
 
 
+def random_translate(image, steering_angle, range_x, range_y):
+    """
+    Randomly shift the image virtially and horizontally (translation).
+    """
+    trans_x = range_x * (np.random.rand() - 0.5)
+    trans_y = range_y * (np.random.rand() - 0.5)
+    steering_angle += trans_x * 0.002
+    trans_m = np.float32([[1, 0, trans_x], [0, 1, trans_y]])
+    height, width = image.shape[:2]
+    image = cv2.warpAffine(image, trans_m, (width, height))
+    return image, steering_angle
+
+
 def random_rotation(image, steering_angle, rotation_amount=15):
 
     angle = np.random.uniform(-rotation_amount, rotation_amount + 1)
@@ -104,6 +117,8 @@ def generate_new_image(image, steering_angle, top_crop_percent=0.35, bottom_crop
     image = crop_image(image, top_crop_percent, bottom_crop_percent)
 
     image, steering_angle = random_flip(image, steering_angle)
+
+    image, steering_angle = random_translate(image, steering_angle, 100, 10)
 
     image = random_gamma(image)
 
