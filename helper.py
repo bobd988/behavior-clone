@@ -118,7 +118,7 @@ def generate_new_image(image, steering_angle, top_crop_percent=0.35, bottom_crop
 
     image, steering_angle = random_flip(image, steering_angle)
 
-    image, steering_angle = random_translate(image, steering_angle, 100, 10)
+    #image, steering_angle = random_translate(image, steering_angle, 100, 10)
 
     image = random_gamma(image)
 
