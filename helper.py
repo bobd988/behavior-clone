@@ -17,7 +17,7 @@ from keras.optimizers import Adam
 # Some useful constants
 DRIVING_LOG_FILE = '../data/driving_log.csv'
 IMG_PATH = '../data/'
-STEERING_COEFFICIENT = 0.20
+STEERING_COEFFICIENT = 0.25
 
 
 def crop_image(image, top_percent, bottom_percent):
