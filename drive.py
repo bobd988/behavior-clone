@@ -2,7 +2,7 @@ import argparse
 import base64
 import json
 from io import BytesIO
-
+import cv2
 import eventlet.wsgi
 import numpy as np
 import socketio
@@ -18,13 +18,10 @@ sio = socketio.Server()
 app = Flask(__name__)
 model = None
 prev_image_array = None
+col, row = 200,66
 
 
 def crop(image, top_percent, bottom_percent):
-
-    assert 0 <= top_percent < 0.5, 'top_percent should be between 0.0 and 0.5'
-    assert 0 <= bottom_percent < 0.5, 'top_percent should be between 0.0 and 0.5'
-
     top = int(np.ceil(image.shape[0] * top_percent))
     bottom = image.shape[0] - int(np.ceil(image.shape[0] * bottom_percent))
 
