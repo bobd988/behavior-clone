@@ -6,16 +6,16 @@ from keras.optimizers import Adam
 from keras.callbacks import ModelCheckpoint
 import helper
 
-STEERING_COEFFICIENT = 0.25
+STEERING_COEFFICIENT = 0.22
 #col, row = 200,66
 IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS = 66, 200, 3
 INPUT_SHAPE = (IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS)
 #bob tf.python.control_flow_ops = tf
-number_of_epochs = 10
+number_of_epochs = 8
 #bob number_of_samples_per_epoch = 20032
 #number_of_validation_samples = 6400
-number_of_samples_per_epoch = 20000
-number_of_validation_samples = 6400
+number_of_samples_per_epoch = 2504
+number_of_validation_samples = 800
 learning_rate = 1e-4
 activation_relu = 'relu'
 
@@ -32,30 +32,30 @@ def build_model():
    # starts with five convolutional and maxpooling layers
    model.add(Convolution2D(24, 5, 5, border_mode='same', subsample=(2, 2)))
    model.add(Activation(activation_relu))
-   #model.add(MaxPooling2D(pool_size=(2, 2), strides=(1, 1)))
+   model.add(MaxPooling2D(pool_size=(2, 2), strides=(1, 1)))
 
    model.add(Convolution2D(36, 5, 5, border_mode='same', subsample=(2, 2)))
    model.add(Activation(activation_relu))
-   #model.add(MaxPooling2D(pool_size=(2, 2), strides=(1, 1)))
+   model.add(MaxPooling2D(pool_size=(2, 2), strides=(1, 1)))
 
    model.add(Convolution2D(48, 5, 5, border_mode='same', subsample=(2, 2)))
    model.add(Activation(activation_relu))
-   #model.add(MaxPooling2D(pool_size=(2, 2), strides=(1, 1)))
+   model.add(MaxPooling2D(pool_size=(2, 2), strides=(1, 1)))
 
    model.add(Convolution2D(64, 3, 3, border_mode='same', subsample=(1, 1)))
    model.add(Activation(activation_relu))
-   #model.add(MaxPooling2D(pool_size=(2, 2), strides=(1, 1)))
+   model.add(MaxPooling2D(pool_size=(2, 2), strides=(1, 1)))
 
    model.add(Convolution2D(64, 3, 3, border_mode='same', subsample=(1, 1)))
    model.add(Activation(activation_relu))
-   #model.add(MaxPooling2D(pool_size=(2, 2), strides=(1, 1)))
+   model.add(MaxPooling2D(pool_size=(2, 2), strides=(1, 1)))
 
    model.add(Dropout(0.5))
-   model.add(Flatten())
+   #model.add(Flatten())
 
    # Next, five fully connected layers
-   #model.add(Dense(1164))
-   #model.add(Activation(activation_relu))
+   model.add(Dense(1164))
+   model.add(Activation(activation_relu))
 
    model.add(Dense(100))
    model.add(Activation(activation_relu))

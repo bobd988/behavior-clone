@@ -44,7 +44,7 @@ def preprocess(image):
     """
     image = crop_image(image,0.35, 0.1)
     image = resize(image,new_dim=(66, 200))
-    #image = rgb2yuv(image)
+    image = rgb2yuv(image)
     return image
 
 def random_flip(image, steering_angle, flipping_prob=0.5):
@@ -59,8 +59,7 @@ def random_gamma(image):
 
     gamma = np.random.uniform(0.4, 1.5)
     inv_gamma = 1.0 / gamma
-    table = np.array([((i / 255.0) ** inv_gamma) * 255
-                      for i in np.arange(0, 256)]).astype("uint8")
+    table = np.array([((i / 255.0) ** inv_gamma) * 255 for i in np.arange(0, 256)]).astype("uint8")
 
     return cv2.LUT(image, table)
 
@@ -117,8 +116,6 @@ def generate_new_image(image, steering_angle, top_crop_percent=0.35, bottom_crop
     image = crop_image(image, top_crop_percent, bottom_crop_percent)
 
     image, steering_angle = random_flip(image, steering_angle)
-
-    #image, steering_angle = random_translate(image, steering_angle, 100, 10)
 
     image = random_gamma(image)
 
