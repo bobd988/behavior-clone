@@ -86,9 +86,9 @@ def train_model(model):
 
     model.compile(optimizer=Adam(learning_rate), loss="mse", )
 
-    # create two generators for training and validation
-    train_generator = helper.generate_next_batch()
-    validation_generator = helper.generate_next_batch()
+    # create generators for training and validation
+    train_generator = helper.generator_training()
+    validation_generator = helper.generator_validation()
 
     history = model.fit_generator(train_generator,
                                   samples_per_epoch=number_of_samples_per_epoch,

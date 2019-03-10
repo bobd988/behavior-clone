@@ -106,7 +106,7 @@ def min_max(data, a=-0.5, b=0.5):
     return a + (b - a) * ((data - data_min) / (data_max - data_min))
 
 
-def generate_new_image(image, steering_angle, top_crop_percent=0.35, bottom_crop_percent=0.1,
+def augment_image(image, steering_angle, top_crop_percent=0.35, bottom_crop_percent=0.1,
                        resize_dim=(66, 200), do_shear_prob=0.9):
 
     head = bernoulli.rvs(do_shear_prob)
@@ -150,7 +150,7 @@ def get_next_image_files(batch_size=64):
     return image_files_and_angles
 
 
-def generate_next_batch(batch_size=64):
+def generator_training(batch_size=64):
 
     while True:
         X_batch = []
@@ -159,7 +159,27 @@ def generate_next_batch(batch_size=64):
         for img_file, angle in images:
             raw_image = plt.imread(IMG_PATH + img_file)
             raw_angle = angle
-            new_image, new_angle = generate_new_image(raw_image, raw_angle)
+            new_image, new_angle = augment_image(raw_image, raw_angle)
+            X_batch.append(new_image)
+            y_batch.append(new_angle)
+
+        assert len(X_batch) == batch_size, 'len(X_batch) == batch_size should be True'
+
+        yield np.array(X_batch), np.array(y_batch)
+
+def generator_validation(batch_size=64):
+
+    while True:
+        X_batch = []
+        y_batch = []
+        images = get_next_image_files(batch_size)
+        for img_file, angle in images:
+            raw_image = plt.imread(IMG_PATH + img_file)
+            raw_angle = angle
+            #new_image, new_angle = generate_new_image(raw_image, raw_angle)
+            new_image = preprocess(raw_image)
+            new_angle = raw_angle
+
             X_batch.append(new_image)
             y_batch.append(new_angle)
 
@@ -170,9 +190,8 @@ def generate_next_batch(batch_size=64):
 
 def save_model(model, model_name='model.json', weights_name='model.h5'):
 
-    silent_delete(model_name)
-    silent_delete(weights_name)
-
+    delete_file(model_name)
+    delete_file(weights_name)
     json_string = model.to_json()
     with open(model_name, 'w') as outfile:
         json.dump(json_string, outfile)
@@ -180,7 +199,7 @@ def save_model(model, model_name='model.json', weights_name='model.h5'):
     model.save_weights(weights_name)
 
 
-def silent_delete(file):
+def delete_file(file):
 
     try:
         os.remove(file)
