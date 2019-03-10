@@ -12,10 +12,8 @@ IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS = 66, 200, 3
 INPUT_SHAPE = (IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS)
 #bob tf.python.control_flow_ops = tf
 number_of_epochs = 8
-#bob number_of_samples_per_epoch = 20032
-#number_of_validation_samples = 6400
-number_of_samples_per_epoch = 2504
-number_of_validation_samples = 800
+number_of_samples_per_epoch = 20244
+number_of_validation_samples = 6400
 learning_rate = 1e-4
 activation_relu = 'relu'
 

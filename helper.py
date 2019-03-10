@@ -17,7 +17,7 @@ from keras.optimizers import Adam
 # Some useful constants
 DRIVING_LOG_FILE = '../data/driving_log.csv'
 IMG_PATH = '../data/'
-STEERING_COEFFICIENT = 0.25
+STEERING_COEFFICIENT = 0.229
 
 
 def crop_image(image, top_percent, bottom_percent):
@@ -44,7 +44,7 @@ def preprocess(image):
     """
     image = crop_image(image,0.35, 0.1)
     image = resize(image,new_dim=(66, 200))
-    image = rgb2yuv(image)
+    #image = rgb2yuv(image)
     return image
 
 def random_flip(image, steering_angle, flipping_prob=0.5):
@@ -163,8 +163,6 @@ def generator_training(batch_size=64):
             X_batch.append(new_image)
             y_batch.append(new_angle)
 
-        assert len(X_batch) == batch_size, 'len(X_batch) == batch_size should be True'
-
         yield np.array(X_batch), np.array(y_batch)
 
 def generator_validation(batch_size=64):
@@ -182,8 +180,6 @@ def generator_validation(batch_size=64):
 
             X_batch.append(new_image)
             y_batch.append(new_angle)
-
-        assert len(X_batch) == batch_size, 'len(X_batch) == batch_size should be True'
 
         yield np.array(X_batch), np.array(y_batch)
 
