@@ -17,7 +17,7 @@ from keras.optimizers import Adam
 # Some useful constants
 DRIVING_LOG_FILE = '../data/driving_log.csv'
 IMG_PATH = '../data/'
-STEERING_COEFFICIENT = 0.25
+STEERING_COEFFICIENT = 0.20
 
 
 def crop_image(image, top_percent, bottom_percent):
@@ -107,13 +107,11 @@ def min_max(data, a=-0.5, b=0.5):
 
 
 def augment_image(image, steering_angle, top_crop_percent=0.35, bottom_crop_percent=0.1,
-                       resize_dim=(66, 200), do_shear_prob=0.6):
+                       resize_dim=(66, 200), do_shear_prob=0.9):
 
     head = bernoulli.rvs(do_shear_prob)
-    #if head == 1:
-        #image, steering_angle = random_shear(image, steering_angle)
-
-    image, steering_angle = random_translate(image, steering_angle, 100, 10)
+    if head == 1:
+        image, steering_angle = random_shear(image, steering_angle)
 
     image = crop_image(image, top_crop_percent, bottom_crop_percent)
 

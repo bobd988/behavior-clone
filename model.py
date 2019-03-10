@@ -14,8 +14,8 @@ INPUT_SHAPE = (IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS)
 number_of_epochs = 8
 #bob number_of_samples_per_epoch = 20032
 #number_of_validation_samples = 6400
-number_of_samples_per_epoch = 20224
-number_of_validation_samples = 6400
+number_of_samples_per_epoch = 5120
+number_of_validation_samples = 1600
 learning_rate = 1e-4
 activation_relu = 'relu'
 
