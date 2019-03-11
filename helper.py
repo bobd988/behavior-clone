@@ -13,7 +13,7 @@ from scipy.stats import bernoulli
 DRIVING_LOG_FILE = '../data/driving_log.csv'
 IMG_PATH = '../data/'
 STEERING_COEFFICIENT = 0.229
-DEBUGING_FLAG = True
+DEBUGING_FLAG = False
 
 
 def crop_image(image, top_percent, bottom_percent):
