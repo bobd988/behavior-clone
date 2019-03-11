@@ -1,29 +1,26 @@
 import errno
 import json
 import os
-
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.misc
-from scipy.ndimage import rotate
 from scipy.stats import bernoulli
-from keras.layers import Dense, Flatten, Lambda, Activation, MaxPooling2D
-from keras.layers.convolutional import Convolution2D
-from keras.models import Sequential
-from keras.optimizers import Adam
+
 
 # Some useful constants
 DRIVING_LOG_FILE = '../data/driving_log.csv'
 IMG_PATH = '../data/'
 STEERING_COEFFICIENT = 0.229
+DEBUGING_FLAG = True
 
 
 def crop_image(image, top_percent, bottom_percent):
 
     top = int(np.ceil(image.shape[0] * top_percent))
     bottom = image.shape[0] - int(np.ceil(image.shape[0] * bottom_percent))
+
     return image[top:bottom, :]
 
 
@@ -53,6 +50,9 @@ def random_flip(image, steering_angle, flipping_prob=0.5):
     if prob_flip == 0:
         image = cv2.flip(image, 1)
         steering_angle = -steering_angle
+        if DEBUGING_FLAG:
+            # Show image if Debug Flag is enabled
+            scipy.misc.imsave('flip.jpg', image)
     return image, steering_angle
 
 def random_gamma(image):
@@ -79,52 +79,40 @@ def random_shear(image, steering_angle, shear_range=200):
     return image, steering_angle
 
 
-def random_translate(image, steering_angle, range_x, range_y):
-    """
-    Randomly shift the image virtially and horizontally (translation).
-    """
-    trans_x = range_x * (np.random.rand() - 0.5)
-    trans_y = range_y * (np.random.rand() - 0.5)
-    steering_angle += trans_x * 0.002
-    trans_m = np.float32([[1, 0, trans_x], [0, 1, trans_y]])
-    height, width = image.shape[:2]
-    image = cv2.warpAffine(image, trans_m, (width, height))
-    return image, steering_angle
-
-
-def random_rotation(image, steering_angle, rotation_amount=15):
-
-    angle = np.random.uniform(-rotation_amount, rotation_amount + 1)
-    rad = (np.pi / 180.0) * angle
-    return rotate(image, angle, reshape=False), steering_angle + (-1) * rad
-
-
-def min_max(data, a=-0.5, b=0.5):
-
-    data_max = np.max(data)
-    data_min = np.min(data)
-    return a + (b - a) * ((data - data_min) / (data_max - data_min))
-
-
 def augment_image(image, steering_angle, top_crop_percent=0.35, bottom_crop_percent=0.1,
                        resize_dim=(66, 200), do_shear_prob=0.9):
+    if DEBUGING_FLAG:
+        # Show image if Debug Flag is enabled
+        scipy.misc.imsave('origin.jpg', image)
 
     head = bernoulli.rvs(do_shear_prob)
     if head == 1:
         image, steering_angle = random_shear(image, steering_angle)
+        if DEBUGING_FLAG:
+            # Show image if Debug Flag is enabled
+            scipy.misc.imsave('shear.jpg', image)
 
     image = crop_image(image, top_crop_percent, bottom_crop_percent)
+    if DEBUGING_FLAG:
+        # Show image if Debug Flag is enabled
+        scipy.misc.imsave('crop.jpg', image)
 
     image, steering_angle = random_flip(image, steering_angle)
 
     image = random_gamma(image)
+    if DEBUGING_FLAG:
+        #Show image if Debug Flag is enabled
+        scipy.misc.imsave('gamma.jpg', image)
 
     image = resize(image, resize_dim)
+    if DEBUGING_FLAG:
+        # Show image if Debug Flag is enabled
+        scipy.misc.imsave('resize.jpg', image)
 
     return image, steering_angle
 
 
-def get_next_image_files(batch_size=64):
+def get_batch_files(batch_size=64):
 
     data = pd.read_csv(DRIVING_LOG_FILE)
     num_of_img = len(data)
@@ -155,7 +143,7 @@ def generator_training(batch_size=64):
     while True:
         X_batch = []
         y_batch = []
-        images = get_next_image_files(batch_size)
+        images = get_batch_files(batch_size)
         for img_file, angle in images:
             raw_image = plt.imread(IMG_PATH + img_file)
             raw_angle = angle
@@ -170,7 +158,7 @@ def generator_validation(batch_size=64):
     while True:
         X_batch = []
         y_batch = []
-        images = get_next_image_files(batch_size)
+        images = get_batch_files(batch_size)
         for img_file, angle in images:
             raw_image = plt.imread(IMG_PATH + img_file)
             raw_angle = angle

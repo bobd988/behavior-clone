@@ -30,6 +30,9 @@ Click [here](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/READ
     - pandas
     - imageio
     - tensorflow
+    - eventlet
+    - socketio
+    - flask
     
 The following resources can be found in this github repository:
 * drive.py - to run the prediction 

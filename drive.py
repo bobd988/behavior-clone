@@ -43,13 +43,13 @@ def resize(image, new_dim):
 def telemetry(sid, data):
     if data:
         # The current steering angle of the car
-        steering_angle = data["steering_angle"]
+        steering_angle = float(data["steering_angle"])
 
         # The current throttle of the car
-        throttle = data["throttle"]
+        throttle = float(data["throttle"])
 
         # The current speed of the car
-        speed = data["speed"]
+        speed = float(data["speed"])
 
         # The current image from the center camera of the car
         imgString = data["image"]
@@ -68,16 +68,15 @@ def telemetry(sid, data):
             transformed_image_array = image_array[None, :, :, :]
 
             # This model currently assumes that the features of the model are just the images. Feel free to change this.
-            steering_angle = 0.3
 
-            #steering_angle = float(model.predict(transformed_image_array, batch_size=1))
-            #global speed_limit
-            #if speed > speed_limit:
-            #    speed_limit = MIN_SPEED  # slow down
-            #else:
-            #    speed_limit = MAX_SPEED
-            #throttle = 1.0 - steering_angle ** 2 - (speed / speed_limit) ** 2
-
+            steering_angle = float(model.predict(transformed_image_array, batch_size=1))
+            # The driving model currently just outputs a constant throttle. Feel free to edit this.
+            global speed_limit
+            if speed > speed_limit:
+                speed_limit = MIN_SPEED  # slow down
+            else:
+                speed_limit = MAX_SPEED
+            throttle = 1.0 - steering_angle ** 2 - (speed / speed_limit) ** 2
 
             print('{:.5f}, {:.1f}'.format(steering_angle, throttle))
 

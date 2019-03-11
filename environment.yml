@@ -18,6 +18,9 @@ dependencies:
     - seaborn
     - pandas
     - imageio
+    - eventlet
+    - socketio
+    - flask
     - pip:
         - moviepy
         - tensorflow
