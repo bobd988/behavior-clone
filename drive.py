@@ -68,15 +68,16 @@ def telemetry(sid, data):
             transformed_image_array = image_array[None, :, :, :]
 
             # This model currently assumes that the features of the model are just the images. Feel free to change this.
+            steering_angle = 0.3
 
-            steering_angle = float(model.predict(transformed_image_array, batch_size=1))
+            #steering_angle = float(model.predict(transformed_image_array, batch_size=1))
+            #global speed_limit
+            #if speed > speed_limit:
+            #    speed_limit = MIN_SPEED  # slow down
+            #else:
+            #    speed_limit = MAX_SPEED
+            #throttle = 1.0 - steering_angle ** 2 - (speed / speed_limit) ** 2
 
-            global speed_limit
-            if speed > speed_limit:
-                speed_limit = MIN_SPEED  # slow down
-            else:
-                speed_limit = MAX_SPEED
-            throttle = 1.0 - steering_angle ** 2 - (speed / speed_limit) ** 2
 
             print('{:.5f}, {:.1f}'.format(steering_angle, throttle))
 
